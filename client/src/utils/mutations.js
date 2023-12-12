@@ -59,7 +59,7 @@ export const REMOVE_BOOK  = gql`
 mutation removeBook($bookId: ID!) {
   removeBook(bookId: $bookId) {
     _id
-    username  // Assuming you want to return the user information after removing the book
+    username
     savedBooks {
       bookId
       authors
