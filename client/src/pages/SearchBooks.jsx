@@ -18,7 +18,7 @@ const SearchBooks = () => {
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
   // Define the saveBook mutation using useMutation hook
-  const [saveBookMutation, { loading, error }] = useMutation(SAVE_BOOK);
+  const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
@@ -35,7 +35,7 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await searchGoogleBooks(searchInput);
+      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`);
 
       if (!response.ok) {
         throw new Error("something went wrong!");
@@ -71,14 +71,9 @@ const SearchBooks = () => {
     }
 
     try {
-      const { data } = await saveBookMutation({
+      const { data } = await saveBook({
         variables: {
-          author: bookToSave.authors.join(", "),
-          description: bookToSave.description,
-          title: bookToSave.title,
-          bookId: bookToSave.bookId,
-          image: bookToSave.image,
-          link: "",
+          bookData: { ...bookToSave }
         },
       });
 
